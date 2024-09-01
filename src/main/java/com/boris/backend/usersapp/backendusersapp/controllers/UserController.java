@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.boris.backend.usersapp.backendusersapp.models.dto.UserDto;
 import com.boris.backend.usersapp.backendusersapp.models.entities.User;
+import com.boris.backend.usersapp.backendusersapp.models.entities.UserComment;
 import com.boris.backend.usersapp.backendusersapp.models.request.UserRequest;
+import com.boris.backend.usersapp.backendusersapp.services.UserCommentService;
 import com.boris.backend.usersapp.backendusersapp.services.UserService;
 
 import jakarta.validation.Valid;
@@ -41,6 +43,9 @@ public class UserController {
     // inyeccion de dependencias de la interfaz de servicio de usuarios
     @Autowired
     private UserService service;
+
+    @Autowired
+    private UserCommentService commentService;
 
     // notacion para indicar que es un metodo get para obtener todos los usuarios de
     // la base de datos
@@ -114,5 +119,26 @@ public class UserController {
         // se devuelve un bad request con los errores
         return ResponseEntity.badRequest().body(errors);
     }
+
+    
+    // notacion para indicar que es un metodo post para crear un comentario de usuario en la base de datos
+    @PostMapping("/create/comments")
+    public ResponseEntity<?> createComment(@Valid @RequestBody UserComment userComment, BindingResult result) {
+        if (result.hasErrors()) {
+            return validation(result);
+        }
+        UserComment savedComment = commentService.save(userComment);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedComment);
+    }
+
+    // notacion para indicar que es un metodo get para obtener todos los comentarios de usuario de la base de datos
+    @GetMapping("/get/comments")
+    public List<UserComment> listComments() {
+        return (List<UserComment>) commentService.findAll();
+        
+    }
+
+
+
 
 }
