@@ -40,8 +40,9 @@ public class SpringSecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/users/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/users/get/comments").permitAll()  //  // Permitir acceso público a /users/comments
-                        .requestMatchers(HttpMethod.POST, "/users/create/comments").permitAll()  // Permitir acceso público a /users/comments
-
+                        .requestMatchers(HttpMethod.POST, "/documents/upload").permitAll()  // Permitir acceso público a /users/comments
+                        .requestMatchers(HttpMethod.POST, "/users/create/comments").permitAll() 
+                        .requestMatchers(HttpMethod.GET, "/documents").permitAll() 
                         .anyRequest().authenticated())
                 .addFilter(new JwtAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
                 .addFilterAfter(new JwtValidationFilter(authenticationConfiguration.getAuthenticationManager()),
